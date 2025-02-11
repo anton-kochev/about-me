@@ -1,0 +1,19 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html"
+  },
+  "networking": {
+    "allowedIpRanges": [
+      "AzureFrontDoor.Backend"
+    ]
+  },
+  "forwardingGateway": {
+    "requiredHeaders": {
+      "X-Azure-FDID": "dca64ef8-18d8-44ad-ac73-4c169e310af6"
+    },
+    "allowedForwardedHosts": [
+      "about-me-gvhmanf6e7cdfjef.z01.azurefd.net",
+      "anton-kochev.cv"
+    ]
+  }
+}
