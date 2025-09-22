@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
+import { marked } from 'marked'
 import { useCheatSheetsStore } from '@/stores/cheatSheets'
 
 const cheatSheetsStore = useCheatSheetsStore()
@@ -22,6 +23,12 @@ const {
   loadCategories,
   refreshCurrentContent
 } = cheatSheetsStore
+
+// Convert markdown to HTML
+const htmlContent = computed(() => {
+  if (!currentContent.value) return ''
+  return marked(currentContent.value)
+})
 
 onMounted(() => {
   loadCategories()
@@ -60,7 +67,7 @@ onMounted(() => {
             Retry
           </button>
         </div>
-        <pre v-else-if="currentContent" class="cheat-sheets__markdown">{{ currentContent }}</pre>
+        <div v-else-if="htmlContent" class="cheat-sheets__content-html" v-html="htmlContent"></div>
         <p v-else class="cheat-sheets__placeholder">Select a category to view cheat sheet content.</p>
       </div>
     </main>
