@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
-import { storeToRefs } from 'pinia'
-import { marked } from 'marked'
 import { useCheatSheetsStore } from '@/stores/cheatSheets'
+import { marked } from 'marked'
+import { storeToRefs } from 'pinia'
+import { computed, onMounted } from 'vue'
 
 const cheatSheetsStore = useCheatSheetsStore()
 
@@ -14,15 +14,12 @@ const {
   isLoading,
   currentContent,
   hasError,
-  errorMessage
+  errorMessage,
 } = storeToRefs(cheatSheetsStore)
 
 // Actions can be destructured normally (they don't need reactivity)
-const {
-  selectCategory,
-  loadCategories,
-  refreshCurrentContent
-} = cheatSheetsStore
+const { selectCategory, loadCategories, refreshCurrentContent } =
+  cheatSheetsStore
 
 // Convert markdown to HTML
 const htmlContent = computed(() => {
@@ -44,31 +41,38 @@ onMounted(() => {
           :key="category.id"
           :class="[
             'cheat-sheets__nav-button',
-            { 'cheat-sheets__nav-button--active': selectedCategoryId === category.id }
+            {
+              'cheat-sheets__nav-button--active':
+                selectedCategoryId === category.id,
+            },
           ]"
           @click="selectCategory(category.id)"
         >
-          {{ category.name }}
+          {{ category.id }}
         </button>
       </nav>
     </aside>
 
     <main class="cheat-sheets__content">
-      <h1 v-if="selectedCategory" class="cheat-sheets__title">
-        {{ selectedCategory.name }} Cheat Sheet
-      </h1>
       <div class="cheat-sheets__body">
-        <div v-if="isLoading" class="cheat-sheets__loading">
-          Loading...
-        </div>
+        <div v-if="isLoading" class="cheat-sheets__loading">Loading...</div>
         <div v-else-if="hasError" class="cheat-sheets__error">
           <p>{{ errorMessage }}</p>
-          <button @click="refreshCurrentContent()" class="cheat-sheets__retry-btn">
+          <button
+            @click="refreshCurrentContent()"
+            class="cheat-sheets__retry-btn"
+          >
             Retry
           </button>
         </div>
-        <div v-else-if="htmlContent" class="cheat-sheets__content-html" v-html="htmlContent"></div>
-        <p v-else class="cheat-sheets__placeholder">Select a category to view cheat sheet content.</p>
+        <div
+          v-else-if="htmlContent"
+          class="cheat-sheets__content-html"
+          v-html="htmlContent"
+        ></div>
+        <p v-else class="cheat-sheets__placeholder">
+          Select a category to view cheat sheet content.
+        </p>
       </div>
     </main>
   </div>

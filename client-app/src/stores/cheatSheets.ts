@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export interface Category {
   id: string
-  name: string
 }
 
 export interface CheatSheetState {
@@ -18,15 +17,22 @@ export const useCheatSheetsStore = defineStore('cheatSheets', () => {
   const categories = ref<Category[]>([])
   const selectedCategoryId = ref('')
   const cheatSheets = ref<Record<string, CheatSheetState>>({})
-  const availableFiles = ['git', 'javascript', 'vue']
+  const availableFiles = [
+    'git',
+    'javascript',
+    'vue',
+    'angular-senior-interview-brief',
+  ]
 
   // Getters
   const selectedCategory = computed(() => {
-    return categories.value.find(cat => cat.id === selectedCategoryId.value)
+    return categories.value.find((cat) => cat.id === selectedCategoryId.value)
   })
 
   const currentCheatSheet = computed(() => {
-    return selectedCategoryId.value ? cheatSheets.value[selectedCategoryId.value] : null
+    return selectedCategoryId.value
+      ? cheatSheets.value[selectedCategoryId.value]
+      : null
   })
 
   const isLoading = computed(() => {
@@ -51,7 +57,7 @@ export const useCheatSheetsStore = defineStore('cheatSheets', () => {
       content: '',
       loading: false,
       error: null,
-      lastLoaded: 0
+      lastLoaded: 0,
     }
   }
 
@@ -73,13 +79,7 @@ export const useCheatSheetsStore = defineStore('cheatSheets', () => {
         // Fetch the markdown file to check if it exists
         const response = await fetch(`/cheat-sheets/${fileId}.md`)
         if (response.ok) {
-          // Convert filename to display name
-          const name = fileId.charAt(0).toUpperCase() + fileId.slice(1)
-            .replace(/([A-Z])/g, ' $1')
-            .replace('javascript', 'JavaScript')
-            .replace('vue', 'Vue.js')
-
-          categoryList.push({ id: fileId, name })
+          categoryList.push({ id: fileId })
         }
       } catch (error) {
         console.warn(`Failed to load ${fileId}.md:`, error)
@@ -160,6 +160,6 @@ export const useCheatSheetsStore = defineStore('cheatSheets', () => {
     loadContent,
     selectCategory,
     refreshCurrentContent,
-    resetStore
+    resetStore,
   }
 })
