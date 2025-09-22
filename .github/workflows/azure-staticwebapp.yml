@@ -25,7 +25,7 @@ on:
 env:
   APP_LOCATION: "./client-app" # location of your client code
   API_LOCATION: "" # location of your api source code - optional
-  APP_ARTIFACT_LOCATION: "build" # location of client code build output
+  APP_ARTIFACT_LOCATION: "dist" # location of client code build output
   AZURE_STATIC_WEB_APPS_API_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }} # secret containing deployment token for your static web app
 
 permissions:
@@ -69,3 +69,4 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
+          app_location: ${{ env.APP_LOCATION }}

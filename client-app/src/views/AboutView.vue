@@ -1,13 +1,9 @@
+<script setup lang="ts"></script>
+
 <template>
-  <div class="about">
+  <main>
     <h1>This is an about page</h1>
-  </div>
+  </main>
 </template>
 
-<style>
-.about {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-}
-</style>
+<style lang="scss" scoped></style>
