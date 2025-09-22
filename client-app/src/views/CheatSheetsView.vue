@@ -1,69 +1,31 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useCheatSheetsStore } from '@/stores/cheatSheets'
 
-interface Category {
-  id: string
-  name: string
-}
+const cheatSheetsStore = useCheatSheetsStore()
 
-const selectedCategory = ref('')
-const categories = ref<Category[]>([])
-const content = ref('')
-const loading = ref(false)
+// Use storeToRefs to maintain reactivity for state and getters
+const {
+  categories,
+  selectedCategoryId,
+  selectedCategory,
+  isLoading,
+  currentContent,
+  hasError,
+  errorMessage
+} = storeToRefs(cheatSheetsStore)
 
-// Available markdown files (this could be made dynamic with a build-time script)
-const availableFiles = ['git', 'javascript', 'vue']
+// Actions can be destructured normally (they don't need reactivity)
+const {
+  selectCategory,
+  loadCategories,
+  refreshCurrentContent
+} = cheatSheetsStore
 
-async function loadCategories() {
-  const categoryList: Category[] = []
-
-  for (const fileId of availableFiles) {
-    try {
-      // Fetch the markdown file to check if it exists
-      const response = await fetch(`/cheat-sheets/${fileId}.md`)
-      if (response.ok) {
-        // Convert filename to display name
-        const name = fileId.charAt(0).toUpperCase() + fileId.slice(1)
-          .replace(/([A-Z])/g, ' $1')
-          .replace('javascript', 'JavaScript')
-          .replace('vue', 'Vue.js')
-
-        categoryList.push({ id: fileId, name })
-      }
-    } catch (error) {
-      console.warn(`Failed to load ${fileId}.md:`, error)
-    }
-  }
-
-  categories.value = categoryList
-  if (categoryList.length > 0 && !selectedCategory.value) {
-    selectedCategory.value = categoryList[0].id
-    await loadContent(categoryList[0].id)
-  }
-}
-
-async function loadContent(categoryId: string) {
-  loading.value = true
-  try {
-    const response = await fetch(`/cheat-sheets/${categoryId}.md`)
-    if (response.ok) {
-      content.value = await response.text()
-    } else {
-      content.value = `# ${categoryId} Cheat Sheet\n\nContent not found.`
-    }
-  } catch (error) {
-    content.value = `# Error\n\nFailed to load content for ${categoryId}.`
-  } finally {
-    loading.value = false
-  }
-}
-
-async function selectCategory(categoryId: string) {
-  selectedCategory.value = categoryId
-  await loadContent(categoryId)
-}
-
-onMounted(loadCategories)
+onMounted(() => {
+  loadCategories()
+})
 </script>
 
 <template>
@@ -75,7 +37,7 @@ onMounted(loadCategories)
           :key="category.id"
           :class="[
             'cheat-sheets__nav-button',
-            { 'cheat-sheets__nav-button--active': selectedCategory === category.id }
+            { 'cheat-sheets__nav-button--active': selectedCategoryId === category.id }
           ]"
           @click="selectCategory(category.id)"
         >
@@ -86,13 +48,19 @@ onMounted(loadCategories)
 
     <main class="cheat-sheets__content">
       <h1 v-if="selectedCategory" class="cheat-sheets__title">
-        {{ categories.find((c) => c.id === selectedCategory)?.name }} Cheat Sheet
+        {{ selectedCategory.name }} Cheat Sheet
       </h1>
       <div class="cheat-sheets__body">
-        <div v-if="loading" class="cheat-sheets__loading">
+        <div v-if="isLoading" class="cheat-sheets__loading">
           Loading...
         </div>
-        <pre v-else-if="content" class="cheat-sheets__markdown">{{ content }}</pre>
+        <div v-else-if="hasError" class="cheat-sheets__error">
+          <p>{{ errorMessage }}</p>
+          <button @click="refreshCurrentContent()" class="cheat-sheets__retry-btn">
+            Retry
+          </button>
+        </div>
+        <pre v-else-if="currentContent" class="cheat-sheets__markdown">{{ currentContent }}</pre>
         <p v-else class="cheat-sheets__placeholder">Select a category to view cheat sheet content.</p>
       </div>
     </main>
