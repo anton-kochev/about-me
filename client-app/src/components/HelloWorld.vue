@@ -5,33 +5,36 @@ defineProps<{
 </script>
 
 <template>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>You’ve successfully created a project</h3>
+  <div class="hello-world">
+    <h1 class="hello-world__title hello-world__title--green">{{ msg }}</h1>
+    <h3 class="hello-world__subtitle">You've successfully created a project</h3>
   </div>
 </template>
 
 <style scoped>
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  position: relative;
-  top: -10px;
-}
+.hello-world {
+  &__title {
+    font-weight: 500;
+    font-size: 2.6rem;
+    position: relative;
+    top: -10px;
+    text-align: center;
 
-h3 {
-  font-size: 1.2rem;
-}
+    &--green {
+      // Green modifier styles (will use global .green styles)
+    }
+  }
 
-.greetings h1,
-.greetings h3 {
-  text-align: center;
-}
+  &__subtitle {
+    font-size: 1.2rem;
+    text-align: center;
+  }
 
-@media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
+  @media (min-width: 1024px) {
+    &__title,
+    &__subtitle {
+      text-align: left;
+    }
   }
 }
 </style>

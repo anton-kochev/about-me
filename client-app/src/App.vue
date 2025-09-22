@@ -3,47 +3,59 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
-    <div class="title">Anton's personal site. Work in progress</div>
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-      <RouterLink to="/cheat-sheets">Cheat Sheets</RouterLink>
-    </nav>
-  </header>
+  <div class="app">
+    <header class="app__header">
+      <div class="app__title">Anton's personal site. Work in progress</div>
+      <nav class="app__nav">
+        <RouterLink to="/" class="app__nav-link">Home</RouterLink>
+        <RouterLink to="/about" class="app__nav-link">About</RouterLink>
+        <RouterLink to="/cheat-sheets" class="app__nav-link">Cheat Sheets</RouterLink>
+      </nav>
+    </header>
 
-  <RouterView />
+    <main class="app__main">
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style scoped lang="scss">
-header {
-  .title {
+.app {
+  &__header {
+    // Header styles
+  }
+
+  &__title {
     text-align: center;
   }
-}
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
+  &__nav {
+    width: 100%;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 2rem;
+  }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
+  &__nav-link {
+    display: inline-block;
+    padding: 0 1rem;
+    border-left: 1px solid var(--color-border);
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
+    &:first-of-type {
+      border: 0;
+    }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
+    &.router-link-exact-active {
+      color: var(--color-text);
 
-nav a:first-of-type {
-  border: 0;
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
+
+  &__main {
+    // Main content styles
+  }
 }
 </style>
