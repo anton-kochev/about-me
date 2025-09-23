@@ -3,10 +3,12 @@
 ## Core Angular — Components, Modules, DI, Lifecycle
 
 **What is an Angular module (NgModule) and why use it?**
+
 NgModule groups related declarations, providers, and imports/exports to control compilation and DI scope.
 Note: Angular 17+ defaults to standalone components, reducing NgModule usage. Still needed for lazy-loaded routes and legacy apps.
 
 **Component vs Directive vs Pipe — when to use each?**
+
 Component: UI with template and lifecycle. Directive: behavior/DOM manipulation without template (structural or attribute). Pipe: pure/impure data transformation for templates.
 Modern: Use standalone components with imports array instead of NgModule declarations.
 
@@ -50,7 +52,7 @@ Defer blocks enable template-level lazy loading with triggers like viewport, int
 ```
 
 **New control flow syntax vs structural directives?**
-Angular 17+ introduces @if, @for, @switch as built-in control flow, replacing *ngIf, *ngFor. Better performance, type safety, and developer experience.
+Angular 17+ introduces `@if`, `@for`, `@switch` as built-in control flow, replacing `*ngIf`, `*ngFor`. Better performance, type safety, and developer experience.
 
 ```html
 <!-- New syntax -->

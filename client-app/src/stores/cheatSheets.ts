@@ -17,12 +17,7 @@ export const useCheatSheetsStore = defineStore('cheatSheets', () => {
   const categories = ref<Category[]>([])
   const selectedCategoryId = ref('')
   const cheatSheets = ref<Record<string, CheatSheetState>>({})
-  const availableFiles = [
-    'git',
-    'javascript',
-    'vue',
-    'angular-senior-interview-brief',
-  ]
+  const availableFiles = ['angular-senior-interview-brief']
 
   // Getters
   const selectedCategory = computed(() => {
